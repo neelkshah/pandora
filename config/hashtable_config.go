@@ -1,0 +1,7 @@
+package config
+
+var (
+	HASHTABLE_INIT_SIZE     = 512
+	HASHTABLE_GROW_FACTOR   = 2
+	HASHTABLE_SHRINK_FACTOR = 0.5
+)
