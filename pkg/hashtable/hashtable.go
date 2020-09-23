@@ -43,15 +43,20 @@ func (ht *HashTable) Delete(key uint64) (int, bool) {
 	return count, status
 }
 
-func (ht *HashTable) Get(key uint64) ([][]byte, bool) {
+func (ht *HashTable) Get(key uint64) ([]uint64, bool) {
 	keyBytes := helper.IntToByte(key)
 	hashKey := helper.HashKey(keyBytes, ht.buckets)
 	bucket := ht.table[hashKey]
 
 	values, status := bucket.Get(keyBytes)
+	n := len(values)
+	objects := make([]uint64, n)
+	for i := 0; i < n; i++ {
+		objects[i] = helper.ByteToInt(values[i])
+	}
 	// TODO: iterate values and convert them back to ints before returning
 
-	return values, status
+	return objects, status
 }
 
 func Expand() {

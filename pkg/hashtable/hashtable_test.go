@@ -3,6 +3,8 @@ package hashtable
 import (
 	"testing"
 
+	"github.com/neelkshah/pandora/pkg/helper"
+
 	"github.com/neelkshah/pandora/config"
 )
 
@@ -17,4 +19,16 @@ func TestCreateHashTable(t *testing.T) {
 			t.Fatalf("Fail at buckets")
 		}
 	}
+}
+
+func TestInsert(t *testing.T) {
+	uint64 key = 5
+	uint64 value = 10
+	var table = *CreateHashTable()
+	var keyBytes = helper.IntToByte(uint64(key))
+	var hashKey = helper.HashKey(keyBytes, table.buckets)
+	valueBytes := helper.IntToByte(value)
+	bucket := table.table[hashKey]
+
+	table.Insert(5, 10)
 }
