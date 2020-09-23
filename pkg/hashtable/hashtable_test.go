@@ -22,8 +22,7 @@ func TestCreateHashTable(t *testing.T) {
 }
 
 func TestInsert(t *testing.T) {
-	uint64 key = 5
-	uint64 value = 10
+	var key, value uint64 = 5, 10
 	var table = *CreateHashTable()
 	var keyBytes = helper.IntToByte(uint64(key))
 	var hashKey = helper.HashKey(keyBytes, table.buckets)
@@ -31,4 +30,24 @@ func TestInsert(t *testing.T) {
 	bucket := table.table[hashKey]
 
 	table.Insert(5, 10)
+
+	// TODO: how to check if number is inserted
+	// check linkedlist using its APIs
+	// or retrieive it from linkedlist and check
+}
+
+func TestGet(t *testing.T) {
+	var key, value, size uint64 = 5, 10, 10
+	var table = *CreateHashTable(size)
+	var keyBytes = helper.IntToByte(uint64(key))
+	var hashKey = helper.HashKey(keyBytes, table.buckets)
+	valueBytes := helper.IntToByte(value)
+	bucket := table.table[hashKey]
+
+	table.Insert(5, 10)
+
+	// TODO: how to test get
+	// insert using linkedlist API
+	// or directly insert into hashtable using insert
+	// but then that's not unit testing
 }
