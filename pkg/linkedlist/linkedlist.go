@@ -6,6 +6,7 @@ package linkedlist
 
 import (
 	"bytes"
+	"fmt"
 
 	"github.com/neelkshah/pandora/config"
 )
@@ -35,8 +36,8 @@ func CreateLinkedList() *LinkedList {
 	return &linkedList
 }
 
-// Append appends a given value to the end of the referenced LinkedList instance.
-func (linkedList *LinkedList) Append(key []byte, value []byte) {
+// AppendImpl appends a given value to the end of the referenced LinkedList instance.
+func (linkedList *LinkedList) AppendImpl(key []byte, value []byte) {
 	var newValue = valueNode{key: key, value: value}
 	if linkedList.count == 0 {
 		var newNode = linkedListNode{values: []valueNode{newValue}, nextNode: nil}
@@ -56,8 +57,8 @@ func (linkedList *LinkedList) Append(key []byte, value []byte) {
 	linkedList.count++
 }
 
-// Get returns the values associate with the key.
-func (linkedList *LinkedList) Get(key []byte) ([][]byte, bool) {
+// GetImpl returns the values associate with the key.
+func (linkedList *LinkedList) GetImpl(key []byte) ([][]byte, bool) {
 	if linkedList == nil || linkedList.head == nil {
 		return nil, true
 	}
@@ -65,7 +66,7 @@ func (linkedList *LinkedList) Get(key []byte) ([][]byte, bool) {
 	var result = make([][]byte, 0)
 	for {
 		if currentNode == nil {
-			break
+			return result, len(result) != 0
 		}
 		for _, vnode := range (*currentNode).values {
 			if bytes.Equal(vnode.key, key) {
@@ -74,14 +75,13 @@ func (linkedList *LinkedList) Get(key []byte) ([][]byte, bool) {
 		}
 		currentNode = currentNode.nextNode
 	}
-	return result, false
 }
 
-// Delete deletes all key-value pairs having the key passed as parameter.
-// It returns the number of deleted pairs and a bool indicating occurrence of an error.
-func (linkedList *LinkedList) Delete(key []byte) (int, bool) {
+// DeleteImpl deletes all key-value pairs having the key passed as parameter.
+// It returns the number of deleted pairs and any error.
+func (linkedList *LinkedList) DeleteImpl(key []byte) (int, error) {
 	if linkedList == nil || linkedList.head == nil {
-		return 0, true
+		return 0, fmt.Errorf("The linked list is empty")
 	}
 	var currentNode = linkedList.head
 	var count = 0
@@ -101,5 +101,5 @@ func (linkedList *LinkedList) Delete(key []byte) (int, bool) {
 		(*currentNode).values = (*currentNode).values[:k]
 		currentNode = currentNode.nextNode
 	}
-	return count, false
+	return count, nil
 }
