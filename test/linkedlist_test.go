@@ -5,6 +5,7 @@
 package test
 
 import (
+	"bytes"
 	"math/rand"
 	"testing"
 
@@ -15,7 +16,22 @@ import (
 func TestCreateLinkedList(t *testing.T) {
 	var response = linkedlist.CreateLinkedList()
 	if response == nil {
-		t.Fail()
+		t.Fatalf("Create is failing")
+	}
+}
+
+func TestNext(t *testing.T) {
+	var list = linkedlist.CreateLinkedList()
+	list.Append(5, 7)
+	list.Append(7, 5)
+	var v1 = helper.IntToByte(5)
+	var v2 = helper.IntToByte(7)
+	var headValues = list.Head().Values
+	if !bytes.Equal(headValues[0].Key, v1) ||
+		!bytes.Equal(headValues[0].Value, v2) ||
+		!bytes.Equal(headValues[1].Key, v2) ||
+		!bytes.Equal(headValues[1].Value, v1) {
+		t.Fatalf("Next is failing")
 	}
 }
 

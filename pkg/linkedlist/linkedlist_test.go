@@ -31,8 +31,8 @@ func TestAppend(t *testing.T) {
 		response.tail == nil ||
 		response.count != 1 ||
 		response.head != response.tail ||
-		helper.ByteToInt(response.head.values[0].value) != 5 ||
-		len(response.head.values) != 1 {
+		helper.ByteToInt(response.head.Values[0].Value) != 5 ||
+		len(response.head.Values) != 1 {
 		t.Fatalf("Failed to append single key-value pair to empty linked list.")
 	}
 }
@@ -56,14 +56,19 @@ func TestFatness(t *testing.T) {
 		t.Fatalf("Error in appending to fat nodes.")
 	}
 	var currentNode = *responselist.head
+	var i = 0
 	for {
-		if len(currentNode.values) != config.NODEFATNESS {
-			t.Fatalf("Error in maintaining fatness.")
+		if len(currentNode.Values) != config.NODEFATNESS {
+			t.Fatalf("Error in individual node fatness.")
 		}
+		i++
 		if currentNode.nextNode == nil {
-			return
+			break
 		}
 		currentNode = *currentNode.nextNode
+	}
+	if i != 3 {
+		t.Fatalf("Overall fatness not being maintained. Number of fat nodes != 3")
 	}
 }
 

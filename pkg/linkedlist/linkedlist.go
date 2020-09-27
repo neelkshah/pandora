@@ -13,44 +13,44 @@ import (
 
 // LinkedList is the data structure used for the hash table.
 type LinkedList struct {
-	head  *linkedListNode
-	tail  *linkedListNode
+	head  *Node
+	tail  *Node
 	count int
 }
 
-// linkedListNode is the data structure that forms the LinkedList.
-type linkedListNode struct {
-	values   []valueNode
-	nextNode *linkedListNode
+// Node is the data structure that forms the LinkedList.
+type Node struct {
+	Values   []valueNode
+	nextNode *Node
 }
 
-// valueNode contains a single value to be stored in the LinkedList.
+// ValueNode contains a single value to be stored in the LinkedList.
 type valueNode struct {
-	key   []byte
-	value []byte
+	Key   []byte
+	Value []byte
 }
 
-// CreateLinkedList returns a pointer to a new empty linked list instance.
-func CreateLinkedList() *LinkedList {
+// createImpl returns a pointer to a new empty linked list instance.
+func createImpl() *LinkedList {
 	linkedList := LinkedList{head: nil, tail: nil, count: 0}
 	return &linkedList
 }
 
 // AppendImpl appends a given value to the end of the referenced LinkedList instance.
-func (linkedList *LinkedList) AppendImpl(key []byte, value []byte) {
-	var newValue = valueNode{key: key, value: value}
+func (linkedList *LinkedList) appendImpl(key []byte, value []byte) {
+	var newValue = valueNode{Key: key, Value: value}
 	if linkedList.count == 0 {
-		var newNode = linkedListNode{values: []valueNode{newValue}, nextNode: nil}
+		var newNode = Node{Values: []valueNode{newValue}, nextNode: nil}
 		linkedList.head = &newNode
 		linkedList.tail = &newNode
 		linkedList.count = 1
 		return
 	}
 	var tailNode = linkedList.tail
-	if len(tailNode.values) < config.NODEFATNESS {
-		tailNode.values = append(tailNode.values, newValue)
+	if len(tailNode.Values) < config.NODEFATNESS {
+		tailNode.Values = append(tailNode.Values, newValue)
 	} else {
-		var newNode = linkedListNode{values: []valueNode{newValue}, nextNode: nil}
+		var newNode = Node{Values: []valueNode{newValue}, nextNode: nil}
 		tailNode.nextNode = &newNode
 		linkedList.tail = &newNode
 	}
@@ -58,7 +58,7 @@ func (linkedList *LinkedList) AppendImpl(key []byte, value []byte) {
 }
 
 // GetImpl returns the values associate with the key.
-func (linkedList *LinkedList) GetImpl(key []byte) ([][]byte, bool) {
+func (linkedList *LinkedList) getImpl(key []byte) ([][]byte, bool) {
 	if linkedList == nil || linkedList.head == nil {
 		return nil, true
 	}
@@ -68,9 +68,9 @@ func (linkedList *LinkedList) GetImpl(key []byte) ([][]byte, bool) {
 		if currentNode == nil {
 			return result, len(result) != 0
 		}
-		for _, vnode := range (*currentNode).values {
-			if bytes.Equal(vnode.key, key) {
-				result = append(result, vnode.value)
+		for _, vnode := range (*currentNode).Values {
+			if bytes.Equal(vnode.Key, key) {
+				result = append(result, vnode.Value)
 			}
 		}
 		currentNode = currentNode.nextNode
@@ -79,7 +79,7 @@ func (linkedList *LinkedList) GetImpl(key []byte) ([][]byte, bool) {
 
 // DeleteImpl deletes all key-value pairs having the key passed as parameter.
 // It returns the number of deleted pairs and any error.
-func (linkedList *LinkedList) DeleteImpl(key []byte) (int, error) {
+func (linkedList *LinkedList) deleteImpl(key []byte) (int, error) {
 	if linkedList == nil || linkedList.head == nil {
 		return 0, fmt.Errorf("The linked list is empty")
 	}
@@ -90,15 +90,15 @@ func (linkedList *LinkedList) DeleteImpl(key []byte) (int, error) {
 		if currentNode == nil {
 			break
 		}
-		for _, vnode := range (*currentNode).values {
-			if !bytes.Equal(vnode.key, key) {
-				(*currentNode).values[k] = vnode
+		for _, vnode := range (*currentNode).Values {
+			if !bytes.Equal(vnode.Key, key) {
+				(*currentNode).Values[k] = vnode
 				k++
 				continue
 			}
 			count++
 		}
-		(*currentNode).values = (*currentNode).values[:k]
+		(*currentNode).Values = (*currentNode).Values[:k]
 		currentNode = currentNode.nextNode
 	}
 	return count, nil

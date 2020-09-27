@@ -11,8 +11,8 @@ func (linkedList *LinkedList) Print() {
 	fmt.Printf("Count of elements: %v\n", linkedList.count)
 	var currentNode = *linkedList.head
 	for {
-		for _, element := range currentNode.values {
-			fmt.Printf("%v, %v\t", element.key, element.value)
+		for _, element := range currentNode.Values {
+			fmt.Printf("%v, %v\t", element.Key, element.Value)
 		}
 		if currentNode.nextNode == nil {
 			return

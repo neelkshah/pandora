@@ -4,7 +4,12 @@
 
 package linkedlist
 
-// Append appends a key value pair to the linked list after checking their respective types
+// CreateLinkedList returns a pointer to a new empty linked list instance.
+func CreateLinkedList() *LinkedList {
+	return createImpl()
+}
+
+// Append appends a key value pair to the linked list after checking their respective types.
 func (linkedlist *LinkedList) Append(iKey interface{}, iValue interface{}) error {
 
 	pair, conversionError := convert(iKey, iValue)
@@ -13,7 +18,7 @@ func (linkedlist *LinkedList) Append(iKey interface{}, iValue interface{}) error
 		return conversionError
 	}
 
-	linkedlist.AppendImpl(pair[0], pair[1])
+	linkedlist.appendImpl(pair[0], pair[1])
 	return nil
 }
 
@@ -26,7 +31,7 @@ func (linkedlist *LinkedList) Get(iKey interface{}) ([][]byte, bool, error) {
 		return nil, false, conversionError
 	}
 
-	valueArray, found := linkedlist.GetImpl(key[0])
+	valueArray, found := linkedlist.getImpl(key[0])
 
 	return valueArray, found, nil
 }
@@ -39,7 +44,17 @@ func (linkedlist *LinkedList) Delete(iKey interface{}) (int, error) {
 		return 0, conversionError
 	}
 
-	deletedCount, deletionError := linkedlist.DeleteImpl(key[0])
+	deletedCount, deletionError := linkedlist.deleteImpl(key[0])
 
 	return deletedCount, deletionError
+}
+
+// Head returns the head node of the linked list.
+func (linkedlist *LinkedList) Head() *Node {
+	return linkedlist.head
+}
+
+// Next returns the next node in the linked list.
+func (node *Node) Next() *Node {
+	return node.nextNode
 }
