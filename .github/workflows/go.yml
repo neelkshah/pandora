@@ -1,10 +1,12 @@
 name: Build and test Go
-'on':
+on:
   - push
-  - pull_request
+  - pull_request:
+      types: [opened, sychronize, reopened, review_requested, ready_for_review]
 jobs:
   build:
     name: Build
+    if: github.event.pull_request.draft == false
     runs-on: ubuntu-latest
     steps:
       - name: Set-up Go 1.15.1
