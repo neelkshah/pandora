@@ -35,7 +35,7 @@ func (ht *HashTable) Insert(key uint64, value uint64) {
 
 	// if hash table has exceeded grow ratio grow it
 	if ht.growCheck() {
-		ht = ht.Grow()
+		ht.Grow()
 	}
 }
 
@@ -85,7 +85,7 @@ func (ht *HashTable) Get(key uint64) ([]uint64, bool) {
 
 // Grow grows the current hashtable by a constant factor
 // it returns reference to new hashtable
-func (ht *HashTable) Grow() *HashTable {
+func (ht *HashTable) Grow() {
 	var newBuckets uint64 = uint64(float64(ht.buckets) * config.HASHTABLE_GROW_FACTOR)
 
 	// Do not shrink below limit
