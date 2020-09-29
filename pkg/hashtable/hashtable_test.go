@@ -2,6 +2,7 @@ package hashtable
 
 import (
 	"bytes"
+	"math"
 	"testing"
 
 	"github.com/neelkshah/pandora/pkg/helper"
@@ -9,7 +10,7 @@ import (
 
 func TestCreate(t *testing.T) {
 	var response = *Create(10)
-	if response.buckets != 10 || response.inserts != 0 || response.deletes != 0 {
+	if response.buckets != 10 || response.occupancy != 0 {
 		t.Fatalf("Fail at values")
 	}
 
@@ -47,7 +48,7 @@ func TestInsert(t *testing.T) {
 		t.Fatalf("Hashtable did not store correct value")
 	}
 
-	if hashTable.inserts != 1 {
+	if hashTable.occupancy != 1 {
 		t.Fatalf("Insert count failed")
 	}
 }
@@ -102,7 +103,7 @@ func TestDelete(t *testing.T) {
 		t.Fatalf("Deleted %d values should have deleted 1 value", response)
 	}
 
-	if hashTable.deletes != 1 {
-		t.Fatalf("Delete counter failed. It counted %d but should have counted 1", hashTable.deletes)
+	if hashTable.occupancy != math.MaxUint64 {
+		t.Fatalf("Occupancy counter failed. It counted %d but should wrapped around because of -1", hashTable.occupancy)
 	}
 }
