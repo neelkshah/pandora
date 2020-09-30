@@ -11,14 +11,13 @@ import (
 	"testing"
 
 	"github.com/neelkshah/pandora/pkg/hashfunc"
-	"github.com/neelkshah/pandora/pkg/helper"
 )
 
-var numWords = 216556
+var numWords = 12823
 
 func getData() ([]string, error) {
 	var lines []string = make([]string, 0, numWords)
-	file, err := os.Open("../assets/words.txt")
+	file, err := os.Open("../assets/arabian_nights.txt")
 
 	if err != nil {
 		return lines, err
@@ -27,7 +26,6 @@ func getData() ([]string, error) {
 	defer file.Close()
 
 	reader := bufio.NewReader(file)
-	// var temp int = 0
 
 	for {
 		line, err := reader.ReadString('\n')
@@ -35,7 +33,9 @@ func getData() ([]string, error) {
 			break
 		}
 
-		lines = append(lines, line)
+		if len(line) > 2 {
+			lines = append(lines, line)
+		}
 
 		if err != nil {
 			break
@@ -64,7 +64,7 @@ func BenchmarkHashing(b *testing.B) {
 		{"Murmur", hashfunc.Murmur},
 	}
 
-	hashtableSize := uint64(2 * len(testStrings))
+	hashtableSize := uint64(len(testStrings))
 	fmt.Println("Hashtable size: ", hashtableSize)
 
 	for _, hasher := range hashFuncs {
@@ -81,7 +81,7 @@ func BenchmarkHashing(b *testing.B) {
 
 				for _, str := range testStrings {
 					hashArr[hasher.hashFunc([]byte(str), hashtableSize)]++
-					hashArr[hasher.hashFunc(helper.IntToByte(num), hashtableSize)]++
+					// hashArr[hasher.hashFunc(helper.IntToByte(num), hashtableSize)]++
 					num++
 				}
 
@@ -94,7 +94,7 @@ func BenchmarkHashing(b *testing.B) {
 				b.StartTimer()
 			}
 			b.ReportMetric(float64(collisions)/float64(b.N), "collisions/op")
-			b.ReportMetric(float64(2*len(testStrings)), "keys")
+			b.ReportMetric(float64(len(testStrings)), "keys")
 		})
 	}
 }
